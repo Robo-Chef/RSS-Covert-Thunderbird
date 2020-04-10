@@ -1,12 +1,13 @@
-print("hello world")
+import requests
+import xmltodict
 
 # class (blueprint for your custom types)
-class RssFeedLine:  # RssFeedLine() or RssFeedLine
+class RssFeed:  # RssFeed() or RssFeed
     """ 
     """
 
     def __init__(
-        self, line
+        self, line,
     ):  # __init__ intitialise the method, or constructor, self refers to the new object(instance) being created
         line = line.strip(
             "\n"
@@ -14,6 +15,8 @@ class RssFeedLine:  # RssFeedLine() or RssFeedLine
         self.title, self.url = line.split(
             ","
         )  # this will produce 'ACS Earth,http://feeds.feedburner' into ['ACS Earth', 'Http://etc']
+        response = requests.get(self.url)
+        self.host_url = xmltodict.parse(response.text)['rss']['channel']['link']
 
     def capitalize_title(self):
         return self.title.upper()
@@ -29,13 +32,14 @@ with open(
     count = 1
     rss_feed_list = []  # an empty list, a list being defined by = [a, 'b', True, 1]
     for line in rss_feed_file:
-        rss_feed_list.append(RssFeedLine(line))
+        feed_object=RssFeed(line)
+        rss_feed_list.append(feed_object)
+    
+    for item in rss_feed_list:
+        print(item.title)
+        print(item.url)
+        print(item.host_url)
 
-
-for line in rss_feed_list:
-    print(line.title)
-    print(line.url)
-    print(line.capitalize_title())
 
 
 print("Test")
@@ -58,8 +62,8 @@ print("Test")
 # print(mitsubishi_car.accelerator)
 # print(lionels_car.accelerator)
 
-# x = RssFeedLine() # x is an instance of type 'RssFeedLine'
-# y = RssFeedLine()
+# x = RssFeed() # x is an instance of type 'RssFeed'
+# y = RssFeed()
 
 # print(x.title)
 # print(x.url)
