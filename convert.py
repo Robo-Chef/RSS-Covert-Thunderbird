@@ -2,7 +2,7 @@ print("hello world")
 
 # class (blueprint for your custom types)
 class RssFeedLine:  # RssFeedLine() or RssFeedLine
-    """
+    """ does things
     """
 
     def __init__(
