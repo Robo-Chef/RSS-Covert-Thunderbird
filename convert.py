@@ -3,20 +3,24 @@ import xmltodict
 
 # class (blueprint for your custom types)
 class RssFeed:  # RssFeed() or RssFeed
-    """ 
+    """
     """
 
+    """
+        __init__ intitialises the method, or constructor,
+        self refers to the new object(instance) being created
+    """
     def __init__(
         self, line,
-    ):  # __init__ intitialise the method, or constructor, self refers to the new object(instance) being created
-        line = line.strip(
-            "\n"
-        )  # return a COPY of the line string, stripped of '\n' (new line delimiter)
-        self.title, self.url = line.split(
-            ","
-        )  # this will produce 'ACS Earth,http://feeds.feedburner' into ['ACS Earth', 'Http://etc']
+    ):
+        # return a COPY of the line string,
+        # stripped of '\n' (new line delimiter)
+        line = line.strip("\n")
+        # this will produce 'ACS Earth,http://feeds.feedburner'
+        # into a python list e.g. ['ACS Earth', 'Http://etc']
+        self.title, self.url = line.split(",")
         response = requests.get(self.url)
-        self.host_url = xmltodict.parse(response.text)['rss']['channel']['link']
+        self.host_url = xmltodict.parse(response.text)["rss"]["channel"]["link"]
 
     def capitalize_title(self):
         return self.title.upper()
@@ -25,21 +29,23 @@ class RssFeed:  # RssFeed() or RssFeed
 # we need to read in the rss-feed-list file
 # use the python builtin `open` function, to read in the file.
 with open(
-    "rss-feed-list.csv", "r"
-) as rss_feed_file:  # load the file in read mode into the rss_feed_file variable
+    # load the file in read mode into the rss_feed_file variable
+    "rss-feed-list.csv",
+    "r",
+) as rss_feed_file:
     # rss_feed_file == ['ACS Earth and Space,http://feeds.feedburner', 'ACS Energy Letter,http://feeds']
 
     count = 1
-    rss_feed_list = []  # an empty list, a list being defined by = [a, 'b', True, 1]
+    # an empty list, a list being defined by = [a, 'b', True, 1]
+    rss_feed_list = []
     for line in rss_feed_file:
-        feed_object=RssFeed(line)
+        feed_object = RssFeed(line)
         rss_feed_list.append(feed_object)
-    
+
     for item in rss_feed_list:
         print(item.title)
         print(item.url)
         print(item.host_url)
-
 
 
 print("Test")
