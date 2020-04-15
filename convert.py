@@ -4,9 +4,6 @@ import xmltodict
 # class (blueprint for your custom types)
 class RssFeed:  # RssFeed() or RssFeed
     """
-    """
-
-    """
         __init__ intitialises the method, or constructor,
         self refers to the new object(instance) being created
     """
